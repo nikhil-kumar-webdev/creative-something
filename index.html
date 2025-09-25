@@ -12,38 +12,55 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      background: radial-gradient(circle at center, #ffe6e6, #ffb3b3);
       overflow: hidden;
       padding: 1rem;
       box-sizing: border-box;
     }
 
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
     .card {
-      width: 300px;
-      height: 300px;
-      background: rgba(255, 255, 255, 0.9);
-      position: relative;
+      width: 350px;
+      min-height: 150px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-      animation: fadeIn 2s ease;
-      clip-path: polygon(50% 0%, 93% 35%, 80% 100%, 50% 80%, 20% 100%, 7% 35%);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      padding: 2rem;
+      padding: 1.5rem;
+      animation: fadeIn 0.5s ease;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
     }
 
     h1 {
       font-size: 2rem;
       color: #ff4b5c;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
-    p {
+    .shayari-container {
       font-size: 1rem;
       color: #444;
-      margin-bottom: 1.5rem;
+      min-height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 10px;
+      transition: opacity 0.5s ease;
     }
 
     button {
@@ -55,8 +72,7 @@
       font-size: 0.95rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      z-index: 10;
-      position: relative;
+      margin-top: 0.5rem;
     }
 
     button:hover {
@@ -94,24 +110,21 @@
       100% {transform: translateY(-10vh) scale(1.2); opacity: 0;}
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
-      .card {
-        width: 250px;
-        height: 250px;
-        padding: 1.5rem;
-      }
-      h1 { font-size: 1.8rem; }
-      p { font-size: 0.95rem; }
-      button { padding: 0.5rem 1.2rem; font-size: 0.9rem; }
+      .card { width: 250px; padding: 1rem; }
+      h1 { font-size: 1.6rem; }
+      .shayari-container { font-size: 0.9rem; }
+      button { padding: 0.5rem 1rem; font-size: 0.85rem; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Pixie ❤️</h1>
-    <p>तुम मेरी दुनिया हो, मेरी धड़कन हो।</p>
-    <button onclick="surprise()">Click me 😘</button>
+  <div class="card-container">
+    <div class="card">
+      <h1>Pixie ❤️</h1>
+      <div class="shayari-container" id="shayari-container"></div>
+      <button onclick="surprise()">Click me 😘</button>
+    </div>
   </div>
 
   <div class="hearts" id="hearts"></div>
@@ -121,13 +134,32 @@
     const shayari = [
       "तुम मेरी धड़कन हो, मेरे ख्वाबों की जान हो।",
       "तुमसे मिलने की खुशी मेरे हर दिन को रोशन कर देती है।",
-      "तुम मेरी दुनिया हो, मेरी मोहब्बत का सबूत हो।"
+      "तुम मेरी दुनिया हो, मेरी मोहब्बत का सबूत हो।",
+      "मेरी हर खुशी तुमसे शुरू होती है।",
+      "तुम बिन मेरी दुनिया सूनी है।",
+      "तुम मेरी मोहब्बत का सबसे हसीन एहसास हो।",
+      "सिर्फ तुम्हारे लिए धड़कती है मेरी रूह।",
+      "तुम मेरे ख्वाबों की सबसे प्यारी तस्वीर हो।",
+      "तुमसे ही रोशन है मेरी जिंदगी।",
+      "तुम मेरी दुआओं की सबसे खूबसूरत वजह हो।"
     ];
+
+    let index = 0;
 
     function surprise() {
       const container = document.getElementById('hearts');
       const flowerContainer = document.getElementById('flowers');
+      const shayariContainer = document.getElementById('shayari-container');
 
+      // Show one shayari at a time
+      shayariContainer.style.opacity = 0;
+      setTimeout(() => {
+        shayariContainer.innerHTML = `<p>❤ ${shayari[index]} ❤</p>`;
+        shayariContainer.style.opacity = 1;
+        index = (index + 1) % shayari.length;
+      }, 200);
+
+      // Add hearts and flowers animation
       for (let i = 0; i < 15; i++) {
         let heart = document.createElement('div');
         heart.classList.add('heart');
@@ -147,9 +179,6 @@
         flowerContainer.appendChild(flower);
         setTimeout(() => flower.remove(), 6000);
       }
-
-      const randomIndex = Math.floor(Math.random() * shayari.length);
-      alert(shayari[randomIndex]);
     }
   </script>
 </body>
